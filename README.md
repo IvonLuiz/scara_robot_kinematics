@@ -40,7 +40,7 @@ The SCARA manipulator is modeled using the following Denavit–Hartenberg table:
 
 Each joint's homogeneous transformation matrix \( A_i \) from frame \( i-1 \) to frame \( i \) is given by the standard Denavit–Hartenberg formula:
 
-\[
+$$
 A_i =
 \begin{bmatrix}
 \cos \theta_i & -\sin \theta_i \cos \alpha_i & \sin \theta_i \sin \alpha_i & a_i \cos \theta_i \\
@@ -48,13 +48,13 @@ A_i =
 0 & \sin \alpha_i & \cos \alpha_i & d_i \\
 0 & 0 & 0 & 1
 \end{bmatrix}
-\]
+$$
 
 The overall forward kinematics transformation \( T \) from the base frame to the end-effector is obtained by the matrix product:
 
-\[
+$$
 T = A_1 \times A_2 \times A_3
-\]
+$$
 
 This matrix \( T \) encodes the position and orientation of the end-effector relative to the base frame.
 
