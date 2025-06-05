@@ -2,9 +2,10 @@
 import rospy
 import numpy as np
 from std_msgs.msg import Float64
-from sensor_msgs.msg import JointState
 from geometry_msgs.msg import Pose
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend
 
 received_pose = None
 
@@ -58,23 +59,47 @@ if __name__ == "__main__":
         (4.2, -0.1, 0.9),   # 9
         (5.6, 1.3, 1.0),    # 10
     ]
-
+    x_diffs, y_diffs, z_diffs = [], [], []
+    
     for i, (j1, j2, j3) in enumerate(test_cases):
+        rospy.loginfo("-" *50)
         rospy.loginfo(f"[TEST {i+1}] Sending joint values: {j1:.2f}, {j2:.2f}, {j3:.2f}")
         publish_joint_positions(j1, j2, j3)
-        rospy.sleep(1.0)  # wait for system to stabilize
 
         x, y, z = compute_fk(j1, j2, j3)
 
         # Wait for the pose to be received
-        rospy.sleep(2.5)
+        rospy.sleep(3.5)
 
         if received_pose:
+            dx = x - received_pose.position.x
+            dy = y - received_pose.position.y
+            dz = z - received_pose.position.z
+
+            x_diffs.append(dx)
+            y_diffs.append(dy)
+            z_diffs.append(dz)
+
             rospy.loginfo(f"DH FK Pose:     x={x:.3f}, y={y:.3f}, z={z:.3f}")
-            rospy.loginfo(f"ROS FK Output: x={received_pose.position.x:.3f}, y={received_pose.position.y:.3f}, z={received_pose.position.z:.3f}")
-            rospy.loginfo(f"Difference:     x={x - received_pose.position.x:.3f}, y={y - received_pose.position.y:.3f}, z={z - received_pose.position.z:.3f}")
+            rospy.loginfo(f"ROS FK Output:  x={received_pose.position.x:.3f}, y={received_pose.position.y:.3f}, z={received_pose.position.z:.3f}")
+            rospy.loginfo(f"Difference:     x={dx:.3f}, y={dy:.3f}, z={dz:.3f}")
         else:
             rospy.logwarn("No pose received yet.")
-        rospy.loginfo("-" *50)
+            x_diffs.append(0.0)
+            y_diffs.append(0.0)
+            z_diffs.append(0.0)
 
-        rospy.sleep(1.0)
+        # Plot differences after all tests
+        plt.figure(figsize=(10, 6))
+        plt.plot(x_diffs, label='Δx')
+        plt.plot(y_diffs, label='Δy')
+        plt.plot(z_diffs, label='Δz')
+        plt.title("Difference Between DH FK and ROS Pose")
+        plt.xlabel("Test Case Index")
+        plt.ylabel("Difference (meters)")
+        plt.grid(True)
+        plt.legend()
+        plt.tight_layout()
+        
+        plt.savefig("fk_differences.png")
+
