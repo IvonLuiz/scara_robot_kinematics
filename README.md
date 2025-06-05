@@ -20,6 +20,8 @@ The goal of this project is to model the **forward kinematics** of a SCARA manip
 ## Forward Kinematics
 ### DH Parameters Table
 
+![Forward Kinematics Differences](media/scara_frames.png)
+
 The SCARA manipulator is modeled using the following Denavit–Hartenberg table:
 
 | Joint (i) | θᵢ (variable) | dᵢ (c.u.) | aᵢ (c.u.) | αᵢ (rad) |
@@ -193,7 +195,7 @@ Difference:     x=0.001, y=0.001, z=0.000
 ```
 This demonstrates good agreement between the two kinematic models, especially in the X and Y dimensions. A consistent Z-difference of 0.02 c.u. suggests either a minor offset in prismatic joint modeling or rounding in the simulation.
 
-![Forward Kinematics Differences](images/fk_differences.png)
+![Forward Kinematics Differences](media/fk_differences.png)
 
 ## Conclusion
 By applying the DH convention and validating with a simulated SCARA robot, we have demonstrated an accurate FK model. 
