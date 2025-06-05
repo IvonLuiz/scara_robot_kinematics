@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.ipynb_checkpoints
+.env
+
+# VSCode
+.vscode/
+
+# ROS build/devel
+build/
+devel/
+log/
+
+# ROS-specific
+*.log
+*.bag
+*.dae
+
+# Images
+*.png
+*.jpg
+*.jpeg
+*.gif
