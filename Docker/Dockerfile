@@ -24,16 +24,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-noetic-ros-controllers \
     build-essential \
     python3-pip \
+    python3-tk \
     git && \
     rm -rf /var/lib/apt/lists/*
 
-# Install python dependencies
-RUN pip3 install pandas
+# Install Python packages
+COPY requirements.txt /tmp/requirements.txt
+RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
+
 
 # Create workspace
 RUN mkdir -p /home/catkin_ws/src
 WORKDIR /home/catkin_ws
-
 
 # Source ROS setup
 RUN echo "source /opt/ros/noetic/setup.bash" >> /root/.bashrc && \
